@@ -1,0 +1,30 @@
+name: ref alias
+on:
+  workflow_dispatch:
+    inputs:
+      head_ref:
+        description: "attacker-controlled PR head ref (as DocSync reads head.ref)"
+        required: true
+        type: string
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout PR Branch (same as docsync_ai_comment)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.head_ref }}
+          token: ${{ github.token }}
+          fetch-depth: 0
+      - name: Write docs and push (same as Commit Changes to PR)
+        run: |
+          set -e
+          echo "checked out branch=$(git rev-parse --abbrev-ref HEAD) sha=$(git rev-parse --short HEAD)"
+          echo "<!-- refalias write from head_ref=${{ inputs.head_ref }} -->" >> README.md
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "DocSync AI: Update documentation from @docbot command"
+          git push origin HEAD
+          echo "pushed branch=$(git rev-parse --abbrev-ref HEAD) sha=$(git rev-parse --short HEAD)"
