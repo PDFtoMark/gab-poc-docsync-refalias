@@ -1,0 +1,15 @@
+name: qacallee
+on:
+  workflow_call:
+    inputs:
+      anthropic_base_url:
+        required: true
+        type: string
+    secrets:
+      ANTHROPIC_AUTH_TOKEN:
+        required: true
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "callee ran"
