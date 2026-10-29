@@ -1,0 +1,8 @@
+name: qacaller
+on:
+  workflow_dispatch: {}
+jobs:
+  c:
+    uses: ./.github/workflows/qacallee.yml
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
